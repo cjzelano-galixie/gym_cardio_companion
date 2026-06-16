@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Gym Routine</title>
+  </head>
+  <body>
+    <header>
+      <h1>Gym Cardio Companion</h1>
+      <nav id="routine-selector">
+        <button class="nav-btn active" data-routine="bike">Bike (25m)</button>
+        <button class="nav-btn" data-routine="elliptical">
+          Elliptical (20m)
+        </button>
+        <button class="nav-btn" data-routine="stairmaster">
+          Stairmaster (10m)
+        </button>
+      </nav>
+    </header>
+    <main class="dashboard-container">
+      <!-- Section 1: Target Guidance Cards -->
+      <section class="info-card">
+        <h2 id="current-phase">Warm-Up</h2>
+        <div class="metric-display">
+          <div class="metric">
+            <span class="label">Targets</span>
+            <span id="target-metrics" class="value">80-90 RPM / Level 2-3</span>
+          </div>
+          <div class="metric">
+            <span class="label">Focus Effort</span>
+            <span id="focus-instruction" class="value"
+              >Easy, getting legs moving comfortably. Focus on smooth
+              breathing.</span
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: The Smart Timer -->
+      <section class="timer-card">
+        <div id="timer-display">05:00</div>
+        <div class="timer-controls">
+          <button id="start-pause-btn" class="control-btn play">Start</button>
+          <button id="reset-btn" class="control-btn reset">Reset</button>
+        </div>
+      </section>
+
+      <!-- Section 3: Data Logger Form (shows on workout end) -->
+      <section id="log-modal" class="modal hidden">
+        <div class="modal-content">
+          <h2>Workout Complete!</h2>
+          <p>Great job! Let's log your stats to the spreadsheet.</p>
+
+          <form id="workout-log-form">
+            <div class="form-group">
+              <label for="calories">Calories Burned (from machine):</label>
+              <input
+                type="number"
+                id="calories"
+                name="calories"
+                placeholder="e.g. 250"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="avg-hr">Avg Heart Rate (optional):</label>
+              <input
+                type="number"
+                id="avg-hr"
+                name="avg-hr"
+                placeholder="e.g. 140"
+              />
+            </div>
+            <div class="form-group">
+              <label for="notes">Workout Notes:</label>
+              <textarea
+                id="notes"
+                name="notes"
+                placeholder="Where could you improve next time?"
+              ></textarea>
+            </div>
+            <button type="submit" id="submit-log-btn">
+              Send to Spreadsheet
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
