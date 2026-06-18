@@ -3,91 +3,251 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cardio Tracker</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👟</text></svg>"
+    />
     <link rel="stylesheet" href="style.css" />
-    <title>Gym Routine</title>
   </head>
   <body>
-    <header>
-      <h1>Gym Cardio Companion</h1>
-      <nav id="routine-selector">
-        <button class="nav-btn active" data-routine="bike">Bike (25m)</button>
-        <button class="nav-btn" data-routine="elliptical">
-          Elliptical (20m)
-        </button>
-        <button class="nav-btn" data-routine="stairmaster">
-          Stairmaster (10m)
-        </button>
-      </nav>
-    </header>
-    <main class="dashboard-container">
-      <!-- Section 1: Target Guidance Cards -->
-      <section class="info-card">
-        <h2 id="current-phase">Warm-Up</h2>
-        <div class="metric-display">
-          <div class="metric">
-            <span class="label">Targets</span>
-            <span id="target-metrics" class="value">80-90 RPM / Level 2-3</span>
+    <section id="screen-workouts" class="app-screen">
+      <header>
+        <h1>Choose Your Routine</h1>
+      </header>
+
+      <div class="dashboard-container programs-view">
+        <div class="info-card welcome-card">
+          <h2>Today's Training</h2>
+          <p>
+            Select a structured program to lock in your active routine deck.
+          </p>
+        </div>
+
+        <div class="timer-card program-card" data-program="hiit">
+          <div class="program-details">
+            <h3>&#x1f525; HIIT Burn Day</h3>
+            <p>
+              High-intensity sprint intervals on the elliptical or treadmill.
+            </p>
           </div>
-          <div class="metric">
-            <span class="label">Focus Effort</span>
-            <span id="focus-instruction" class="value"
-              >Easy, getting legs moving comfortably. Focus on smooth
-              breathing.</span
-            >
+          <div class="badge-group">
+            <span class="badge-duration">&#x23f1;&#xfe0f; 30 min</span>
+            <span class="badge-difficulty hard">Hard</span>
           </div>
         </div>
-      </section>
 
-      <!-- Section 2: The Smart Timer -->
-      <section class="timer-card">
-        <div id="timer-display">05:00</div>
-        <div class="timer-controls">
-          <button id="start-pause-btn" class="control-btn play">Start</button>
-          <button id="reset-btn" class="control-btn reset">Reset</button>
+        <div class="timer-card program-card" data-program="combo">
+          <div class="program-details">
+            <h3>&#x1f9d7; Elliptical + Stairmaster Day</h3>
+            <p>
+              A powerful two-machine circuit focusing on glutes and stamina.
+            </p>
+          </div>
+          <div class="badge-group">
+            <span class="badge-duration">&#x23f1;&#xfe0f; 20m/stn</span>
+            <span class="badge-difficulty medium">Medium</span>
+          </div>
         </div>
-      </section>
 
-      <!-- Section 3: Data Logger Form (shows on workout end) -->
-      <section id="log-modal" class="modal hidden">
-        <div class="modal-content">
-          <h2>Workout Complete!</h2>
-          <p>Great job! Let's log your stats to the spreadsheet.</p>
-
-          <form id="workout-log-form">
-            <div class="form-group">
-              <label for="calories">Calories Burned (from machine):</label>
-              <input
-                type="number"
-                id="calories"
-                name="calories"
-                placeholder="e.g. 250"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="avg-hr">Avg Heart Rate (optional):</label>
-              <input
-                type="number"
-                id="avg-hr"
-                name="avg-hr"
-                placeholder="e.g. 140"
-              />
-            </div>
-            <div class="form-group">
-              <label for="notes">Workout Notes:</label>
-              <textarea
-                id="notes"
-                name="notes"
-                placeholder="Where could you improve next time?"
-              ></textarea>
-            </div>
-            <button type="submit" id="submit-log-btn">
-              Send to Spreadsheet
-            </button>
-          </form>
+        <div class="timer-card program-card" data-program="c25k">
+          <div class="program-details">
+            <h3>&#x1f3c3; Couch to 5K Progression</h3>
+            <p>
+              Interval training designed to systematically build run endurance.
+            </p>
+          </div>
+          <div class="badge-group">
+            <span class="badge-duration">&#x23f1;&#xfe0f; 21 min</span>
+            <span class="badge-difficulty easy">Easy</span>
+          </div>
         </div>
-      </section>
-    </main>
+
+        <div class="timer-card program-card" data-program="recovery">
+          <div class="program-details">
+            <h3>&#x1f331; Low-Impact Recovery Cruise</h3>
+            <p>An easy aerobic flush on the bike to restore sore muscles.</p>
+          </div>
+          <div class="badge-group">
+            <span class="badge-duration">&#x23f1;&#xfe0f; 25 min</span>
+            <span class="badge-difficulty easy">Easy</span>
+          </div>
+        </div>
+
+        <div class="timer-card program-card" data-program="custom">
+          <div class="program-details">
+            <h3>&#x1f6e0;&#xfe0f; Custom Active Configuration</h3>
+            <p>
+              Open sandbox mode. Mix and match any machine or difficulty on the
+              fly.
+            </p>
+          </div>
+          <div class="badge-group">
+            <span class="badge-duration">&#x23f1;&#xfe0f; Custom</span>
+            <span class="badge-difficulty sandbox">Sandbox</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-timer" class="app-screen hidden">
+      <header>
+        <h1>Cardio Interval Timer</h1>
+        <div id="routine-selector">
+          <button class="nav-btn" data-routine="treadmill">Treadmill</button>
+          <button class="nav-btn active" data-routine="bike">Bike</button>
+          <button class="nav-btn" data-routine="elliptical">Elliptical</button>
+          <button class="nav-btn" data-routine="stairmaster">
+            Stairmaster
+          </button>
+        </div>
+        <div id="intensity-selector" class="intensity-bar">
+          <button class="intensity-btn" data-intensity="easy">Easy</button>
+          <button class="intensity-btn active" data-intensity="medium">
+            Medium
+          </button>
+          <button class="intensity-btn" data-intensity="hard">Hard</button>
+        </div>
+      </header>
+
+      <div class="dashboard-container">
+        <div id="c25k-status-banner" class="c25k-banner hidden">
+          <span class="banner-icon">🎯</span> COUCH TO 5K •
+          <span id="c25k-banner-text">WEEK 1, DAY 1</span>
+        </div>
+
+        <div class="info-card">
+          <h2 id="current-phase">Warm-Up</h2>
+          <div class="metric-display">
+            <div class="metric">
+              <span class="label">Target Metrics</span>
+              <span id="target-metrics" class="value"
+                >80-90 RPM / Level 2-3</span
+              >
+            </div>
+            <div class="metric">
+              <span class="label">Focus Instruction</span>
+              <span id="focus-instruction" class="value"
+                >Easy, getting legs moving comfortably.</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-card display-wrapper">
+          <div id="timer-display">05:00</div>
+          <div class="timer-controls">
+            <button id="start-pause-btn" class="control-btn play">Start</button>
+            <button id="reset-btn" class="control-btn reset">Reset</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-history" class="app-screen hidden">
+      <header>
+        <h1>Your Progress</h1>
+      </header>
+      <div class="dashboard-container">
+        <div class="info-card">
+          <h2 class="section-title">Recent Activity</h2>
+          <div id="history-log-list" class="metric-display">
+            <p class="empty-log-msg">No workouts saved yet. Hit the gym!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="bottom-nav">
+      <button class="tab-btn active" data-screen="screen-workouts">
+        <span class="tab-icon">&#x1f3e0;</span>
+        <span class="tab-label">Programs</span>
+      </button>
+      <button class="tab-btn" data-screen="screen-timer">
+        <span class="tab-icon">&#x23f1;&#xfe0f;</span>
+        <span class="tab-label">Timer</span>
+      </button>
+      <button class="tab-btn" data-screen="screen-history">
+        <span class="tab-icon">&#x1f4c8;</span>
+        <span class="tab-label">History</span>
+      </button>
+    </nav>
+
+    <div id="log-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Workout Complete!</h2>
+        <p>Awesome job. Let's save your metrics to your dashboard log.</p>
+        <form id="workout-log-form">
+          <div class="form-group">
+            <label for="calories">Calories Burned</label>
+            <input
+              type="number"
+              id="calories"
+              required
+              placeholder="e.g. 350"
+            />
+          </div>
+          <div class="form-group">
+            <label id="distance-label" for="distance">Distance (Miles)</label>
+            <input
+              type="number"
+              id="distance"
+              step="0.01"
+              required
+              placeholder="e.g. 3.10"
+            />
+          </div>
+          <div class="form-group">
+            <label for="avg-hr">Average Heart Rate (Optional)</label>
+            <input type="number" id="avg-hr" placeholder="e.g. 145" />
+          </div>
+          <div class="form-group">
+            <label for="notes">Quick Notes</label>
+            <textarea id="notes" placeholder="How did it feel?"></textarea>
+          </div>
+          <button type="submit" id="submit-log-btn">Send to Spreadsheet</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="nav-modal" class="modal confirmation-modal hidden">
+      <div class="modal-content prompt-box">
+        <div class="modal-status-icon">&#x23f8;&#xfe0f;</div>
+        <h3>Pause Workout?</h3>
+        <p>
+          Leaving this screen will temporarily pause your active workout
+          countdown. Do you want to proceed?
+        </p>
+        <div class="modal-action-row">
+          <button id="nav-cancel" class="modal-btn cancel-action">
+            No, Stay
+          </button>
+          <button id="nav-confirm" class="modal-btn confirm-action">
+            Yes, Pause
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="custom-modal" class="modal program-reset-modal hidden">
+      <div class="modal-content prompt-box">
+        <div class="modal-status-icon">&#x26a0;&#xfe0f;</div>
+        <h3>Switch Program?</h3>
+        <p>
+          Selecting a new routine will clear your current timeline progress. Are
+          you sure you want to change setups?
+        </p>
+        <div class="modal-action-row">
+          <button id="modal-cancel" class="modal-btn cancel-action">
+            No, Keep Running
+          </button>
+          <button id="modal-confirm" class="modal-btn confirm-action">
+            Yes, Change
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script src="app.js"></script>
   </body>
 </html>
