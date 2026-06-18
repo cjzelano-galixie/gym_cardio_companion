@@ -1191,7 +1191,6 @@ if (logForm) {
 // 11. INITIALIZATION INVOCATION
 // ==========================================================================
 
-// 1. Ask your Google Sheet for your current progress numbers and follow redirects
 fetch(GOOGLE_SHEETS_API_URL, {
   method: "GET",
   redirect: "follow",
@@ -1205,18 +1204,15 @@ fetch(GOOGLE_SHEETS_API_URL, {
   .then((data) => {
     console.log("Successfully retrieved spreadsheet data:", data);
 
-    // 2. Set your app variables to match the sheet's actual data numbers
     if (data && data.c25kWeek && data.c25kDay) {
       c25kCurrentWeek = Number(data.c25kWeek);
       c25kCurrentDay = Number(data.c25kDay);
     }
 
-    // 3. Run your standard layout initializations now that we have the numbers
     renderActiveWorkoutConfiguration();
     updateHistoryDashboardUI();
   })
   .catch((err) => {
-    // Fallback: If anything fails, run your standard initializations anyway
     console.warn(
       "Could not read sheet data on startup, using local states:",
       err,
