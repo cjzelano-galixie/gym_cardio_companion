@@ -1190,8 +1190,12 @@ if (logForm) {
 // ==========================================================================
 // 11. INITIALIZATION INVOCATION
 // ==========================================================================
-// 1. Ask your Google Sheet for your current progress numbers
-fetch(GOOGLE_SHEETS_API_URL)
+
+// 1. Ask your Google Sheet for your current progress numbers and follow redirects
+fetch(GOOGLE_SHEETS_API_URL, {
+  method: "GET",
+  redirect: "follow",
+})
   .then((response) => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
