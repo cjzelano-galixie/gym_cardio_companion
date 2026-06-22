@@ -11,8 +11,8 @@
 
   /* Additional Shared Colors for Badges & UI Indicators */
   --color-easy: #2ecc71;
-  --color-medium: #3498db;
-  --color-hard: var(--accent-coral);
+  --color-moderate: #3498db;
+  --color-challenging: #ff6b6b;
   --color-sandbox: #7f8c8d;
 }
 
@@ -47,17 +47,18 @@ body {
 }
 
 header {
-  background-color: white;
-  padding: 20px 20px 15px 20px;
-  border-bottom: 1px solid var(--border-light);
+  background-color: transparent;
+  padding: 20px 20px 10px 20px;
+  border-bottom: none;
   text-align: center;
 }
 
 header h1 {
-  font-size: 1.4rem;
+  font-size: 1.8rem;
   color: var(--bg-navy);
-  font-weight: 700;
-  margin-bottom: 15px;
+  /* letter-spacing: -0.2em; */
+  font-weight: 800;
+  /* margin-bottom: 15px; */
 }
 
 .dashboard-container {
@@ -142,21 +143,28 @@ header h1 {
 }
 
 .info-card.welcome-card {
-  padding: 12px;
-  margin-bottom: 8px;
-  text-align: left;
+  background: white; /* Contrast against the light gray body */
+  border-radius: 20px;
+  padding: 16px;
+  margin-top: -10px;
+  margin-bottom: 10px; /* More breathing room */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); /* Softer, wider shadow */
+  border: 1px solid var(--border-light);
+  text-align: center; /* Center aligning looks sleeker for welcome text */
 }
 
 .info-card.welcome-card h2 {
   color: var(--bg-navy);
-  font-size: 1.15rem;
-  margin-bottom: 4px;
+  font-size: 1.3rem;
+  margin-bottom: 8px;
 }
 
 .info-card.welcome-card p {
   color: var(--accent-sage);
-  font-size: 0.8rem;
-  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 #current-phase {
@@ -250,10 +258,10 @@ header h1 {
 
 /* Map duration theme colors to specific profiles dynamically */
 [data-program="hiit"] .badge-duration {
-  background-color: var(--color-hard);
+  background-color: var(--color-challenging);
 }
 [data-program="combo"] .badge-duration {
-  background-color: var(--color-medium);
+  background-color: var(--color-moderate);
 }
 [data-program="c25k"] .badge-duration {
   background-color: var(--color-easy);
@@ -275,11 +283,11 @@ header h1 {
 .badge-difficulty.easy {
   color: var(--color-easy);
 }
-.badge-difficulty.medium {
-  color: var(--color-medium);
+.badge-difficulty.moderate {
+  color: var(--color-moderate);
 }
-.badge-difficulty.hard {
-  color: var(--color-hard);
+.badge-difficulty.challenging {
+  color: var(--color-challenging);
 }
 .badge-difficulty.sandbox {
   color: var(--color-sandbox);
@@ -589,4 +597,28 @@ header h1 {
 #submit-log-btn:disabled {
   background-color: var(--accent-sage);
   cursor: not-allowed;
+}
+
+.required-label::after {
+  content: " *";
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+#status-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: var(--bg-navy);
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+.hidden {
+  display: none;
 }

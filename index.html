@@ -33,7 +33,7 @@
           </div>
           <div class="badge-group">
             <span class="badge-duration">&#x23f1;&#xfe0f; 30 min</span>
-            <span class="badge-difficulty hard">Hard</span>
+            <span class="badge-difficulty challenging">Challenging</span>
           </div>
         </div>
 
@@ -46,7 +46,7 @@
           </div>
           <div class="badge-group">
             <span class="badge-duration">&#x23f1;&#xfe0f; 20m/stn</span>
-            <span class="badge-difficulty medium">Medium</span>
+            <span class="badge-difficulty moderate">Moderate</span>
           </div>
         </div>
 
@@ -103,10 +103,12 @@
         </div>
         <div id="intensity-selector" class="intensity-bar">
           <button class="intensity-btn" data-intensity="easy">Easy</button>
-          <button class="intensity-btn active" data-intensity="medium">
-            Medium
+          <button class="intensity-btn active" data-intensity="moderate">
+            Moderate
           </button>
-          <button class="intensity-btn" data-intensity="hard">Hard</button>
+          <button class="intensity-btn" data-intensity="challenging">
+            Challenging
+          </button>
         </div>
       </header>
 
@@ -179,30 +181,45 @@
         <p>Awesome job. Let's save your metrics to your dashboard log.</p>
         <form id="workout-log-form">
           <div class="form-group">
-            <label for="calories">Calories Burned</label>
+            <label for="calories" class="required-label">Calories Burned</label>
             <input
-              type="number"
+              type="text"
               id="calories"
+              name="calories"
               required
+              maxlength="3"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              inputmode="numeric"
               placeholder="e.g. 350"
             />
           </div>
           <div class="form-group">
-            <label id="distance-label" for="distance">Distance (Miles)</label>
+            <label id="distance-label" for="distance" class="required-label"
+              >Distance (Miles)</label
+            >
             <input
-              type="number"
+              type="text"
               id="distance"
               step="0.01"
               required
-              placeholder="e.g. 3.10"
+              placeholder="e.g. 01:05"
+              oninput="formatDecimalInput(this)"
             />
           </div>
           <div class="form-group">
             <label for="avg-hr">Average Heart Rate (Optional)</label>
-            <input type="number" id="avg-hr" placeholder="e.g. 145" />
+            <input
+              type="text"
+              id="avg-hr"
+              name="avg-hr"
+              maxlength="3"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              inputmode="numeric"
+              placeholder="e.g. 145"
+            />
           </div>
           <div class="form-group">
-            <label for="notes">Quick Notes</label>
+            <label for="notes">Quick Notes (Optional)</label>
             <textarea id="notes" placeholder="How did it feel?"></textarea>
           </div>
           <button type="submit" id="submit-log-btn">Send to Spreadsheet</button>
@@ -247,7 +264,11 @@
         </div>
       </div>
     </div>
-
+    <div id="status-overlay" class="hidden">
+      <div style="font-size: 2rem; margin-bottom: 10px">✅</div>
+      <h3>Workout Logged!</h3>
+      <p>Your session has been synchronized.</p>
+    </div>
     <script src="app.js"></script>
   </body>
 </html>

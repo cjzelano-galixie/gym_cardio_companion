@@ -29,7 +29,7 @@ const workoutData = {
         },
       ],
     },
-    medium: {
+    moderate: {
       phases: [
         {
           name: "Warm-Up",
@@ -52,7 +52,7 @@ const workoutData = {
         },
       ],
     },
-    hard: {
+    challenging: {
       phases: [
         {
           name: "Warm-Up",
@@ -66,7 +66,7 @@ const workoutData = {
           time: "20:00",
           targets: "6.5+ MPH / 2-4% Incline",
           instruction:
-            "Hard running intervals. Push through the hill resistance!",
+            "Challenging running intervals. Push through the hill resistance!",
         },
         {
           name: "Cool-Down",
@@ -104,7 +104,7 @@ const workoutData = {
         },
       ],
     },
-    medium: {
+    moderate: {
       name: "Standard Interval Climb",
       phases: [
         {
@@ -149,7 +149,7 @@ const workoutData = {
         },
       ],
     },
-    hard: {
+    challenging: {
       name: "Glute Burner Incline",
       phases: [
         {
@@ -203,7 +203,7 @@ const workoutData = {
         },
       ],
     },
-    medium: {
+    moderate: {
       name: "Sculpt & Sprint",
       phases: [
         {
@@ -243,7 +243,7 @@ const workoutData = {
         },
       ],
     },
-    hard: {
+    challenging: {
       name: "The Mountain Peak",
       phases: [
         {
@@ -294,11 +294,11 @@ const workoutData = {
         },
       ],
     },
-    medium: {
+    moderate: {
       name: "Stairway Endurance",
       phases: [
         {
-          name: "The Warm-Up",
+          name: "Warm-Up",
           time: "03:00",
           targets: "Level 1 or 2 (Very Slow)",
           instruction:
@@ -327,7 +327,7 @@ const workoutData = {
         },
       ],
     },
-    hard: {
+    challenging: {
       name: "Anabolic Ladder Climb",
       phases: [
         {
@@ -623,7 +623,7 @@ function generateC25kPhases(week, day) {
 const GOOGLE_SHEETS_API_URL =
   "https://script.google.com/macros/s/AKfycby_MBSZNvBfTFjE8YMZDJqqdEDamyAzsfZtD8aQnXZrQCeIRJCLbqxaf3jLiAksZhLK/exec";
 let currentRoutine = "bike";
-let currentIntensity = "medium";
+let currentIntensity = "moderate";
 let activeProgramType = "sandbox";
 let isC25kMode = false;
 let c25kCurrentWeek = 1;
@@ -668,10 +668,99 @@ function formatTimeDisplay(totalSeconds) {
   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
+function formatDecimalInput(input) {
+  // 1. Keep only numbers and one decimal point
+  let value = input.value.replace(/[^0-9.]/g, "");
+
+  // 2. Prevent multiple decimals
+  const parts = value.split(".");
+  if (parts.length > 2) {
+    value = parts[0] + "." + parts.slice(1).join("");
+  }
+
+  // 3. Limit to 2 digits before dot, 2 after
+  const newParts = value.split(".");
+  if (newParts[0].length > 2) {
+    newParts[0] = newParts[0].substring(0, 2);
+  }
+  if (newParts[1] !== undefined && newParts[1].length > 2) {
+    newParts[1] = newParts[1].substring(0, 2);
+  }
+
+  input.value = newParts.join(".");
+}
+
+function showStatusOverlay() {
+  const overlay = document.getElementById("status-overlay");
+  if (overlay) {
+    overlay.classList.remove("hidden");
+    // Auto-hide after 2.5 seconds
+    setTimeout(() => {
+      overlay.classList.add("hidden");
+    }, 2500);
+  }
+}
+
+function saveWorkoutSessionSnapshot() {
+  // If no workout has started, don't save anything
+  if (timeRemainingSeconds <= 0) return;
+
+  const sessionState = {
+    routine: currentRoutine, // e.g., 'elliptical'
+    intensity: currentIntensity, // e.g., 'moderate'
+    secondsRemaining: timeRemainingSeconds,
+    phaseIndex: currentPhaseIndex,
+    programType: activeProgramType, // Tracks 'hiit', 'c25k', etc.
+    isPaused: timerInterval === null, // True if paused, False if ticking
+    isC25k: isC25kMode,
+    activeProgram: activeProgramType,
+  };
+
+  sessionStorage.setItem("active_cardio_session", JSON.stringify(sessionState));
+}
+
+function loadWorkoutSessionSnapshot() {
+  const savedData = sessionStorage.getItem("active_cardio_session");
+  if (!savedData) return null; // Exit if nothing is stored
+
+  const sessionState = JSON.parse(savedData);
+
+  // Rehydrate your app's exact global variables
+  currentRoutine = sessionState.routine;
+  currentIntensity = sessionState.intensity;
+  timeRemainingSeconds = sessionState.secondsRemaining;
+  currentPhaseIndex = sessionState.phaseIndex;
+  activeProgramType = sessionState.programType;
+
+  return sessionState;
+}
+
+function clearWorkoutSessionSnapshot() {
+  sessionStorage.removeItem("active_cardio_session");
+}
+
 // ==========================================================================
 // 5. APPLICATION LAYOUT RENDER LOGIC
 // ==========================================================================
+// Helper to clean up titles like "Warm-Up (EASY)"
+function cleanPhaseTitle(title) {
+  // Regex to remove the parentheses and the text inside them
+  return title.replace(/\s*\([^)]*\)/, "").trim();
+}
+
 function renderActiveWorkoutConfiguration() {
+  const restoredSession = loadWorkoutSessionSnapshot();
+  if (
+    restoredSession &&
+    restoredSession.isC25k === isC25kMode &&
+    restoredSession.activeProgram === activeProgramType &&
+    restoredSession.routine === currentRoutine &&
+    restoredSession.intensity === currentIntensity
+  ) {
+    updateTimerDisplay();
+    return;
+  }
+
   let initialPhase;
 
   const c25kBanner = document.getElementById("c25k-status-banner");
@@ -699,7 +788,7 @@ function renderActiveWorkoutConfiguration() {
 
     if (c25kBanner) c25kBanner.classList.add("hidden");
 
-    phaseTitleEl.textContent = `${initialPhase.name} (${currentIntensity.toUpperCase()})`;
+    phaseTitleEl.textContent = cleanPhaseTitle(initialPhase.name);
 
     if (routineSelector) routineSelector.style.display = "flex";
     if (intensitySelector) intensitySelector.style.display = "flex";
@@ -852,10 +941,10 @@ function endWorkout() {
     distanceInput.placeholder = "e.g. 2.50";
   } else if (currentRoutine === "stairmaster") {
     distanceLabel.textContent = "Floors Climbed";
-    distanceInput.placeholder = "e.g. 45";
+    distanceInput.placeholder = "e.g. 01.05";
   } else {
     distanceLabel.textContent = "Distance (Miles/Calculated)";
-    distanceInput.placeholder = "e.g. 5.2";
+    distanceInput.placeholder = "e.g. 01.05";
   }
 
   logForm.reset();
@@ -931,12 +1020,16 @@ intensityButtons.forEach((button) => {
 startPauseBtn.addEventListener("click", () => {
   if (isTimerRunning) {
     pauseTimer();
+    saveWorkoutSessionSnapshot();
   } else {
     startTimer();
   }
 });
 
-resetBtn.addEventListener("click", resetTimer);
+resetBtn.addEventListener("click", () => {
+  clearWorkoutSessionSnapshot();
+  resetTimer();
+});
 
 tabButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -948,6 +1041,7 @@ tabButtons.forEach((button) => {
 
     if (isTimerRunning) {
       pendingTargetScreenId = targetScreenId;
+      saveWorkoutSessionSnapshot();
       if (navModal) navModal.classList.remove("hidden");
     } else {
       executeScreenSwitch(targetScreenId);
@@ -962,6 +1056,7 @@ function executeScreenSwitch(targetScreenId) {
   tabButtons.forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.screen === targetScreenId);
   });
+  renderActiveWorkoutConfiguration();
 }
 
 if (navCancel) {
@@ -1012,12 +1107,12 @@ function switchActiveProgram(card) {
     if (bikeBtn) bikeBtn.style.display = "none";
     if (stairmasterBtn) stairmasterBtn.style.display = "none";
     currentRoutine = "elliptical";
-    currentIntensity = "hard";
+    currentIntensity = "challenging";
   } else if (programType === "combo") {
     if (bikeBtn) bikeBtn.style.display = "none";
     if (treadmillBtn) treadmillBtn.style.display = "none";
     currentRoutine = "elliptical";
-    currentIntensity = "medium";
+    currentIntensity = "moderate";
   } else if (programType === "c25k") {
     if (bikeBtn) bikeBtn.style.display = "none";
     if (ellipticalBtn) ellipticalBtn.style.display = "none";
@@ -1060,6 +1155,7 @@ programCards.forEach((card) => {
   card.addEventListener("click", () => {
     const clickedProgram = card.dataset.program;
     if (activeProgramType === clickedProgram) {
+      renderActiveWorkoutConfiguration(); // Force the engine to re-verify our matching snapshot!
       executeScreenSwitch("screen-timer");
       return;
     }
@@ -1109,17 +1205,17 @@ if (logForm) {
       date: new Date().toLocaleDateString(),
       machine: isC25kMode
         ? "Couch to 5K"
-        : workoutData[currentRoutine].title || "Treadmill",
+        : workoutData[currentRoutine]?.title || "Treadmill",
       intensity: intensityOrProgressionText,
       calories: document.getElementById("calories").value,
-      heartRate: document.getElementById("avg-hr").value || "N/A",
-      notes: document.getElementById("notes").value || "None",
+      heartRate: document.getElementById("avg-hr")?.value || "N/A",
+      notes: document.getElementById("notes")?.value || "None",
       miles:
-        isC25kMode || workoutData[currentRoutine].metricType === "miles"
+        isC25kMode || workoutData[currentRoutine]?.metricType === "miles"
           ? inputValue
           : null,
       flights:
-        !isC25kMode && workoutData[currentRoutine].metricType === "flights"
+        !isC25kMode && workoutData[currentRoutine]?.metricType === "flights"
           ? inputValue
           : null,
       c25kWeek: isC25kMode ? c25kCurrentWeek : null,
@@ -1134,13 +1230,13 @@ if (logForm) {
       intensityOrProgression: intensityOrProgressionText,
       calories: Number(document.getElementById("calories").value) || 0,
       distance: parseFloat(inputValue) || 0.0,
-      avgHr: Number(document.getElementById("avg-hr").value) || "N/A",
-      notes: document.getElementById("notes").value || "",
+      avgHr: Number(document.getElementById("avg-hr")?.value) || "N/A",
+      notes: document.getElementById("notes")?.value || "",
     };
 
     const submitBtn = document.getElementById("submit-log-btn");
     if (submitBtn) {
-      submitBtn.textContent = "Syncing with Sheets...";
+      submitBtn.textContent = "Syncing...";
       submitBtn.disabled = true;
     }
 
@@ -1152,11 +1248,12 @@ if (logForm) {
       body: JSON.stringify(payload),
     })
       .then(() => {
+        // Close modal and reset form
         const logModal = document.getElementById("log-modal");
         if (logModal) logModal.classList.add("hidden");
         logForm.reset();
 
-        // Safe Single-Run State Advancer
+        // Safe State Advancement
         if (isC25kMode) {
           if (c25kCurrentDay < 3) {
             c25kCurrentDay++;
@@ -1165,10 +1262,10 @@ if (logForm) {
             c25kCurrentWeek++;
           }
         }
+        clearWorkoutSessionSnapshot();
 
-        alert(
-          "Workout successfully synchronized to your Google Sheet dashboard!",
-        );
+        // Trigger your Sleek Confirmation Box
+        showStatusOverlay();
 
         updateHistoryDashboardUI();
         resetTimer();
@@ -1176,7 +1273,10 @@ if (logForm) {
       })
       .catch((err) => {
         console.error("Synchronization failure:", err);
-        alert("Network latency error. Failed to send data to spreadsheet.");
+        // Better UX: alert the user but allow them to keep their local log
+        alert(
+          "Sync failed, but your workout was saved locally. Check your internet connection to sync to the sheet later.",
+        );
       })
       .finally(() => {
         if (submitBtn) {
