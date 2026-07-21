@@ -87,19 +87,19 @@ const workoutData = {
         {
           name: "Warm-Up",
           time: "05:00",
-          targets: "70-80 RPM / Level 2",
+          targets: "70-80 RPM / Gear 4",
           instruction: "Gentle spin to get the blood flowing.",
         },
         {
           name: "Steady Cruise",
           time: "15:00",
-          targets: "80-90 RPM / Level 3",
+          targets: "80-90 RPM / Gear 8",
           instruction: "Comfortable aerobic pace. Keep it smooth.",
         },
         {
           name: "Cool-Down",
           time: "05:00",
-          targets: "70 RPM / Level 2",
+          targets: "70 RPM / Gear 4",
           instruction: "Slow down your legs completely.",
         },
       ],
@@ -110,65 +110,102 @@ const workoutData = {
         {
           name: "Warm-Up",
           time: "05:00",
-          targets: "80-90 RPM / Level 2-3",
+          targets: "70-80 RPM / Gear 4",
           instruction:
             "Easy, getting legs moving comfortably. Focus on smooth breathing.",
         },
         {
           name: "Base Pace",
-          time: "04:00",
-          targets: "90-100 RPM / Level 4",
+          time: "03:00",
+          targets: "85-90 RPM / Gear 8",
           instruction: "Moderate effort. Can talk but breathing heavier.",
         },
         {
           name: "The Climb",
-          time: "05:00",
-          targets: "70-80 RPM / Level 6-7",
+          time: "01:00",
+          targets: "70-80 RPM / Gear 12",
           instruction:
             "Heavy effort. Simulates a steep hill climb. Keep core engaged.",
         },
         {
-          name: "Recovery",
+          name: "Base Pace",
+          time: "03:00",
+          targets: "85-90 RPM / Gear 8",
+          instruction: "Recover into moderate effort, breathing settles a bit.",
+        },
+        {
+          name: "The Climb",
           time: "01:00",
-          targets: "80 RPM / Level 3",
-          instruction: "Catch your breath, bring heart rate down slightly.",
+          targets: "70-80 RPM / Gear 12",
+          instruction: "Second climb push. Keep core engaged.",
+        },
+        {
+          name: "Base Pace",
+          time: "03:00",
+          targets: "85-90 RPM / Gear 8",
+          instruction: "Steady cruise before the sprint set.",
+        },
+        {
+          name: "The Climb",
+          time: "01:00",
+          targets: "70-80 RPM / Gear 12",
+          instruction: "Third and final climb push.",
         },
         {
           name: "Speed Intervals",
           time: "05:00",
-          targets: "100+ RPM Sprints",
+          targets: "100+ RPM Sprints / Gear 8",
           instruction:
             "Repeat 5x: Sprint fast for 30 seconds, cruise slow for 30 seconds.",
         },
         {
           name: "Cool-Down",
           time: "05:00",
-          targets: "70-80 RPM / Level 2",
+          targets: "70-80 RPM / Gear 4",
           instruction:
             "Slow down your legs completely, prepare your body for the sauna.",
         },
       ],
     },
     challenging: {
-      name: "Glute Burner Incline",
+      name: "Endurance Burner",
       phases: [
         {
           name: "Warm-Up",
           time: "05:00",
-          targets: "80-90 RPM / Level 4",
+          targets: "80-90 RPM / Gear 4",
           instruction: "Brisk warm-up pace.",
         },
         {
-          name: "Heavy Resistance",
-          time: "20:00",
-          targets: "70 RPM / Level 8-10",
+          name: "Sustained Push",
+          time: "12:00",
+          targets: "90-100 RPM / Gear 8",
           instruction:
-            "High resistance hill simulation. Power through your heels.",
+            "Higher cadence, moderate resistance. This is your engine work — stay smooth, don't grind.",
+        },
+        {
+          name: "Climb Surge",
+          time: "01:00",
+          targets: "70-80 RPM / Gear 12",
+          instruction: "Short, hard climb push. Keep core engaged.",
+        },
+        {
+          name: "Recovery Spin",
+          time: "02:00",
+          targets: "85-90 RPM / Gear 8",
+          instruction: "Bring effort back down, keep legs turning.",
+        },
+        {
+          name: "Speed Finisher",
+          time: "05:00",
+          targets: "100+ RPM Sprints / Gear 8",
+          instruction:
+            "Repeat 5x: Sprint fast for 30 seconds, cruise slow for 30 seconds.",
         },
         {
           name: "Cool-Down",
           time: "05:00",
-          targets: "70 RPM / Level 3",
+          targets: "70 RPM / Gear 3",
           instruction: "Flush the lactic acid out of your legs.",
         },
       ],
