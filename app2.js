@@ -997,7 +997,7 @@ function goToNextPhase() {
 
     phaseTitleEl.textContent = isC25kMode
       ? nextPhase.name
-      : `${nextPhase.name} (${currentIntensity.toUpperCase()})`;
+      : `${nextPhase.name} (${currentIntensity})`;
     targetsEl.textContent = nextPhase.targets;
     instructionEl.textContent = nextPhase.instruction;
     timeRemainingSeconds = convertTimeToSeconds(nextPhase.time);
@@ -1273,12 +1273,10 @@ if (logForm) {
   logForm.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    const programName = activeProgramType
-      ? activeProgramType.toUpperCase()
-      : "SANDBOX";
+    const programName = activeProgramType ? activeProgramType : "SANDBOX";
     const intensityOrProgressionText = isC25kMode
       ? `W${c25kCurrentWeek}D${c25kCurrentDay}`
-      : currentIntensity.toUpperCase();
+      : currentIntensity;
     const inputValue = document.getElementById("distance").value;
 
     // 1. Compile Local Dashboard Cache Item
@@ -1307,7 +1305,7 @@ if (logForm) {
     // 2. Build Cloud Payload
     const payload = {
       program: programName,
-      equipment: currentRoutine.toUpperCase(),
+      equipment: currentRoutine,
       intensityOrProgression: intensityOrProgressionText,
       calories: Number(document.getElementById("calories").value) || 0,
       distance: parseFloat(inputValue) || 0.0,
